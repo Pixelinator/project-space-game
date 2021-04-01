@@ -14,6 +14,10 @@ export function Home() {
         <li>
           <Link to="/settings">Settings</Link>
         </li>
+        <li>
+          <Link to="/playground">Playground</Link>
+        </li>
+
       </ul>
     </div>
   );
