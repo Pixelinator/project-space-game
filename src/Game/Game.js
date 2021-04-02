@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber'
 import { Loading } from '../Loading/Loading'
 import { CameraControls } from '../CameraControls/CameraControls'
 import Bee from '../Asset/Bee'
+import YBot from '../Asset/Ybot'
 
 export function Game() {
   return (
@@ -14,6 +15,9 @@ export function Game() {
         <pointLight position={[-10, -10, -10]} />
         <Suspense fallback={<Loading />}>
           <Bee />
+        </Suspense>
+        <Suspense fallback={<Loading />}>
+          <YBot />
         </Suspense>
       </Canvas>
     </>
