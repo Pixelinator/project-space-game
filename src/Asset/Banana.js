@@ -7,19 +7,12 @@ import { useGLTF } from '@react-three/drei'
 
 export default function Model(props) {
   const group = useRef()
-  const { nodes, materials } = useGLTF('/Banana.glb')
+  const { nodes, materials } = useGLTF('./models/gltf/Banana.glb')
   return (
     <group ref={group} {...props} dispose={null}>
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Cube.geometry}
-        material={materials.Material}
-        position={[-4.65, 2.46, 0]}
-        rotation={[0, 0, -0.68]}
-      />
+      <mesh castShadow receiveShadow geometry={nodes.Cube.geometry} material={materials.Material} position={[-4.65, 2.46, 0]} rotation={[0, 0, -0.68]} />
     </group>
   )
 }
 
-useGLTF.preload('/Banana.glb')
+useGLTF.preload('./models/gltf/Banana.glb')
