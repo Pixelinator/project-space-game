@@ -4,7 +4,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 extend({ OrbitControls })
 
-export function CameraControls(props) {
+export function OrbitCamera(props) {
   // Get a reference to the Three.js Camera, and the canvas html element.
   // We need these to setup the OrbitControls component.
   // https://threejs.org/docs/#examples/en/controls/OrbitControls
