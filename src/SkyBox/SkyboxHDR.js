@@ -25,6 +25,6 @@ export function SkyboxHDR({ background = false }) {
     if (background) scene.background = hdrCubeRenderTarget.texture
     scene.environment = hdrCubeRenderTarget.texture
     return () => (scene.environment = scene.background = null)
-  }, [cubeMap])
+  }, [cubeMap, background, gl, scene])
   return null
 }
