@@ -10,7 +10,7 @@ import { Skybox } from '../SkyBox/Skybox'
 import { SkyboxHDR } from '../SkyBox/SkyboxHDR'
 
 export function Game() {
-  const pad = new GamePad(window)
+  // const pad = new GamePad(window)
   const input = new KeyboardState()
   input.listenTo(window)
   input.addMapping(32, (keyState) => {
@@ -20,7 +20,7 @@ export function Game() {
   return (
     <>
       <Canvas style={{ height: window.innerHeight }}>
-        <OrbitCamera autoRotate={false} />
+        <OrbitCamera autoRotate={true} />
         {/*
         <ambientLight intensity={0.5} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
