@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
-import KeyboardState from '../Keyboard/KeyboardState'
-import GamePad from '../Keyboard/Gamepad'
+import Keyboard from '../Keyboard/Keyboard'
+// import GamePad from '../Keyboard/Gamepad'
 import { Loading } from '../Loading/Loading'
 import { OrbitCamera } from '../Camera/OrbitCamera'
 // import Bee from '../Asset/Bee'
@@ -10,12 +10,8 @@ import { Skybox } from '../SkyBox/Skybox'
 import { SkyboxHDR } from '../SkyBox/SkyboxHDR'
 
 export function Game() {
-  // const pad = new GamePad(window)
-  const input = new KeyboardState()
-  input.listenTo(window)
-  input.addMapping(32, (keyState) => {
-    console.log(keyState)
-  })
+  // new GamePad(window)
+  new Keyboard(window)
 
   return (
     <>
