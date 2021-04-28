@@ -1,10 +1,10 @@
-import "./App.css";
-import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Home } from "../Home/Home";
-import { Game } from "../Game/Game";
-import { Settings } from "../Settings/Settings";
-import { Playground } from "../Playground/Playground";
+import './App.css'
+import React from 'react'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { Home } from '../Home/Home'
+import { Game } from '../Game/Game'
+import { Settings } from '../Settings/Settings'
+import { Playground } from '../Playground/Playground'
 
 export default function App() {
   return (
@@ -24,5 +24,5 @@ export default function App() {
         </Route>
       </Switch>
     </Router>
-  );
+  )
 }
