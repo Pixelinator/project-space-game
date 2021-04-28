@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import * as THREE from 'three'
 import SkyBox from '../SkyBox/Skybox'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { ThirdPersonCamera } from '../Camera/ThirdPersonCamera'
 import { BasicCharacterController } from '../Controller/BasicCharacterController'
 
 export class Game extends Component {
@@ -51,9 +51,9 @@ export class Game extends Component {
     plane.rotation.x = -Math.PI / 2
     scene.add(plane)
 
-    let orbit = new OrbitControls(camera, renderer.domElement)
-    orbit.minDistance = 50
-    orbit.maxDistance = 250
+    // let orbit = new OrbitControls(camera, renderer.domElement)
+    // orbit.minDistance = 50
+    // orbit.maxDistance = 250
 
     let mixers = []
 
@@ -63,6 +63,10 @@ export class Game extends Component {
     }
 
     let controls = new BasicCharacterController(params)
+    let thirdPersonCamera = new ThirdPersonCamera({
+      camera: camera,
+      target: controls
+    })
 
     // ------------------------
     //     Window Resize
@@ -90,6 +94,8 @@ export class Game extends Component {
       if (controls) {
         controls.Update(timeElapsedS)
       }
+
+      thirdPersonCamera.Update(timeElapsedS)
     }
 
     let previousRAF = null

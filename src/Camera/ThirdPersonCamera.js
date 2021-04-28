@@ -1,38 +1,40 @@
 import * as THREE from 'three'
 
-class ThirdPersonCamera {
+export class ThirdPersonCamera {
   constructor(params) {
-    this.params = params
-    this.camera = params.camera
+    this._params = params
+    this._camera = params.camera
 
-    this.currentPosition = new THREE.Vector3()
-    this.currentLookat = new THREE.Vector3()
+    this._currentPosition = new THREE.Vector3()
+    this._currentLookat = new THREE.Vector3()
   }
 
-  CalculateIdealOffset() {
+  _CalculateIdealOffset() {
     const idealOffset = new THREE.Vector3(-15, 20, -30)
-    idealOffset.applyQuaternion(this.params.target.Rotation)
-    idealOffset.add(this.params.target.Position)
+    idealOffset.applyQuaternion(this._params.target.Rotation)
+    idealOffset.add(this._params.target.Position)
     return idealOffset
   }
 
-  CalculateIdealLookat() {
+  _CalculateIdealLookat() {
     const idealLookat = new THREE.Vector3(0, 10, 50)
-    idealLookat.applyQuaternion(this.params.target.Rotation)
-    idealLookat.add(this.params.target.Position)
+    idealLookat.applyQuaternion(this._params.target.Rotation)
+    idealLookat.add(this._params.target.Position)
     return idealLookat
   }
 
   Update(timeElapsed) {
-    const idealOffset = this.CalculateIdealOffset()
-    const idealLookat = this.CalculateIdealLookat()
+    const idealOffset = this._CalculateIdealOffset()
+    const idealLookat = this._CalculateIdealLookat()
 
+    // const t = 0.05;
+    // const t = 4.0 * timeElapsed;
     const t = 1.0 - Math.pow(0.001, timeElapsed)
 
-    this.currentPosition.lerp(idealOffset, t)
-    this.currentLookat.lerp(idealLookat, t)
+    this._currentPosition.lerp(idealOffset, t)
+    this._currentLookat.lerp(idealLookat, t)
 
-    this.camera.position.copy(this.currentPosition)
-    this.camera.lookAt(this.currentLookat)
+    this._camera.position.copy(this._currentPosition)
+    this._camera.lookAt(this._currentLookat)
   }
 }
