@@ -1,10 +1,10 @@
-import { FiniteStateMachine } from './StateMachine/FiniteStateMachine'
+import { finite_state_machine } from './StateMachine/FiniteStateMachine'
 import IdleState from './StateMachine/IdleState'
 import WalkState from './StateMachine/WalkState'
 import RunState from './StateMachine/RunState'
 import DanceState from './StateMachine/DanceState'
 
-export class CharacterFSM extends FiniteStateMachine {
+export class CharacterFSM extends finite_state_machine.FiniteStateMachine {
   constructor(proxy) {
     super()
     this._proxy = proxy

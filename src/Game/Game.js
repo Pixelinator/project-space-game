@@ -1,40 +1,26 @@
 import React, { Component } from 'react'
 import * as THREE from 'three'
 import SkyBox from '../SkyBox/Skybox'
-import { ThirdPersonCamera } from '../Camera/ThirdPersonCamera'
-import { BasicCharacterController } from '../Controller/BasicCharacterController'
+import { third_person_camera } from '../Entity/Camera/ThirdPersonCamera'
+import { entity_manager } from '../Entity/EntityManager'
+import { entity } from '../Entity/Entity'
+import { player_entity } from '../Entity/Player/PlayerEntity'
+import { player_input } from '../Entity/Player/PlayerInput'
+
+import { spatial_grid_controller } from '../Controller/SpatialGrid/SpatialGridController'
+import { spatial_hash_grid } from '../Controller/SpatialGrid/SpatialHashGrid'
 
 export class Game extends Component {
   componentDidMount() {
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
     const renderer = new THREE.WebGLRenderer({ antialias: true })
-    renderer.physicallyCorrectLights = true
-    renderer.toneMapping = THREE.ACESFilmicToneMapping
-    renderer.toneMappingExposure = 4
-    renderer.shadowMap.enabled = true
-    renderer.shadowMap.type = THREE.PCFShadowMap
-
-    camera.position.set(0, 30, 100)
-
     renderer.setSize(window.innerWidth, window.innerHeight)
     this.mount.appendChild(renderer.domElement)
 
     new SkyBox(scene, renderer)
 
     let light1 = new THREE.DirectionalLight(0xffffff, 1.0)
-    light1.position.set(-100, 100, 100)
-    light1.target.position.set(0, 0, 0)
-    light1.castShadow = true
-    light1.shadow.bias = -0.001
-    light1.shadow.mapSize.width = 4096
-    light1.shadow.mapSize.height = 4096
-    light1.shadow.camera.near = 0.5
-    light1.shadow.camera.far = 500.0
-    light1.shadow.camera.left = 50
-    light1.shadow.camera.right = -50
-    light1.shadow.camera.top = 50
-    light1.shadow.camera.bottom = -50
     scene.add(light1)
 
     let light2 = new THREE.AmbientLight(0xffffff, 0.25)
@@ -51,22 +37,41 @@ export class Game extends Component {
     plane.rotation.x = -Math.PI / 2
     scene.add(plane)
 
-    // let orbit = new OrbitControls(camera, renderer.domElement)
-    // orbit.minDistance = 50
-    // orbit.maxDistance = 250
+    const entityManager = new entity_manager.EntityManager()
 
-    let mixers = []
+    const grid = new spatial_hash_grid.SpatialHashGrid(
+      [
+        [-1000, -1000],
+        [1000, 1000]
+      ],
+      [100, 100]
+    )
 
-    const params = {
-      camera: camera,
-      scene: scene
-    }
+    const player = new entity.Entity()
+    player.AddComponent(
+      new player_input.BasicCharacterControllerInput({
+        camera: camera,
+        scene: scene
+      })
+    )
+    player.AddComponent(
+      new player_entity.BasicCharacterController({
+        camera: camera,
+        scene: scene
+      })
+    )
+    player.AddComponent(new spatial_grid_controller.SpatialGridController({ grid: grid }))
+    entityManager.Add(player, 'player')
 
-    let controls = new BasicCharacterController(params)
-    let thirdPersonCamera = new ThirdPersonCamera({
-      camera: camera,
-      target: controls
-    })
+    let thirdPersonCamera = new entity.Entity()
+    thirdPersonCamera.AddComponent(
+      new third_person_camera.ThirdPersonCamera({
+        camera: camera,
+        target: entityManager.Get('player')
+      })
+    )
+
+    entityManager.Add(thirdPersonCamera, 'player-camera')
 
     // ------------------------
     //     Window Resize
@@ -87,15 +92,7 @@ export class Game extends Component {
     //-------------------------
     const step = function (timeElapsed) {
       const timeElapsedS = timeElapsed * 0.001
-      if (mixers) {
-        mixers.map((m) => m.update(timeElapsedS))
-      }
-
-      if (controls) {
-        controls.Update(timeElapsedS)
-      }
-
-      thirdPersonCamera.Update(timeElapsedS)
+      entityManager.Update(timeElapsedS)
     }
 
     let previousRAF = null
@@ -117,9 +114,22 @@ export class Game extends Component {
   }
 
   render() {
+    const overlayStyle = {
+      color: 'white',
+      position: 'absolute',
+      bottom: '10px',
+      width: '100%',
+      textAlign: 'center',
+      zIndex: '100',
+      display: 'block'
+    }
+
     return (
       <>
         <div ref={(ref) => (this.mount = ref)} />
+        <div id="overlay" style={overlayStyle}>
+          Overlay
+        </div>
       </>
     )
   }
