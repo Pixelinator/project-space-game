@@ -2,7 +2,14 @@ import * as THREE from 'three'
 import { entity } from '../Entity'
 
 export const third_person_camera = (() => {
+  /**
+   *
+   */
   class ThirdPersonCamera extends entity.Component {
+    /**
+     *
+     * @param {*} params
+     */
     constructor(params) {
       super()
 
@@ -13,6 +20,10 @@ export const third_person_camera = (() => {
       this._currentLookat = new THREE.Vector3()
     }
 
+    /**
+     *
+     * @returns <THREE.Vector3>
+     */
     _CalculateIdealOffset() {
       const idealOffset = new THREE.Vector3(-0, 10, -15)
       idealOffset.applyQuaternion(this._params.target._rotation)
@@ -20,6 +31,10 @@ export const third_person_camera = (() => {
       return idealOffset
     }
 
+    /**
+     *
+     * @returns <THREE.Vector3>
+     */
     _CalculateIdealLookat() {
       const idealLookat = new THREE.Vector3(0, 5, 20)
       idealLookat.applyQuaternion(this._params.target._rotation)
@@ -27,6 +42,10 @@ export const third_person_camera = (() => {
       return idealLookat
     }
 
+    /**
+     *
+     * @param {*} timeElapsed
+     */
     Update(timeElapsed) {
       const idealOffset = this._CalculateIdealOffset()
       const idealLookat = this._CalculateIdealLookat()

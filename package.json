@@ -23,7 +23,8 @@
     "eject": "react-scripts eject",
     "electron-dev": "concurrently \"npm run start BROWSER=none\" \"wait-on http://localhost:3000 && electron .\"",
     "preelectron-pack": "npm run build",
-    "electron-pack": "electron-builder -c.extraMetadata.main=build/electron.js"
+    "electron-pack": "electron-builder -c.extraMetadata.main=build/electron.js",
+    "doc": "jsdoc -c jsdoc.json"
   },
   "eslintConfig": {
     "extends": [
@@ -47,6 +48,7 @@
     "concurrently": "^6.0.0",
     "electron": "^12.0.2",
     "electron-builder": "^22.10.5",
+    "jsdoc": "^3.6.6",
     "wait-on": "^5.3.0"
   },
   "build": {

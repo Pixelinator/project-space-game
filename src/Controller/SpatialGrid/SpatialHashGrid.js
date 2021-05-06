@@ -1,7 +1,15 @@
 import { math } from '../../util/Math'
 
 export const spatial_hash_grid = (() => {
+  /**
+   *
+   */
   class SpatialHashGrid {
+    /**
+     *
+     * @param {*} bounds
+     * @param {*} dimensions
+     */
     constructor(bounds, dimensions) {
       const [x, y] = dimensions
       this._cells = [...Array(x)].map((_) => [...Array(y)].map((_) => null))
@@ -10,6 +18,11 @@ export const spatial_hash_grid = (() => {
       this._queryIds = 0
     }
 
+    /**
+     *
+     * @param {*} position
+     * @returns <array>
+     */
     _GetCellIndex(position) {
       const x = math.sat((position[0] - this._bounds[0][0]) / (this._bounds[1][0] - this._bounds[0][0]))
       const y = math.sat((position[1] - this._bounds[0][1]) / (this._bounds[1][1] - this._bounds[0][1]))
@@ -20,6 +33,12 @@ export const spatial_hash_grid = (() => {
       return [xIndex, yIndex]
     }
 
+    /**
+     *
+     * @param {*} position
+     * @param {*} dimensions
+     * @returns <object>
+     */
     NewClient(position, dimensions) {
       const client = {
         position: position,
@@ -37,6 +56,11 @@ export const spatial_hash_grid = (() => {
       return client
     }
 
+    /**
+     *
+     * @param {*} client
+     * @returns <void>
+     */
     UpdateClient(client) {
       const [x, y] = client.position
       const [w, h] = client.dimensions
@@ -52,6 +76,12 @@ export const spatial_hash_grid = (() => {
       this._Insert(client)
     }
 
+    /**
+     *
+     * @param {*} position
+     * @param {*} bounds
+     * @returns <array>
+     */
     FindNear(position, bounds) {
       const [x, y] = position
       const [w, h] = bounds
@@ -70,7 +100,7 @@ export const spatial_hash_grid = (() => {
             const v = head.client
             head = head.next
 
-            if (v._queryId != queryId) {
+            if (v._queryId !== queryId) {
               v._queryId = queryId
               clients.push(v)
             }
@@ -80,6 +110,10 @@ export const spatial_hash_grid = (() => {
       return clients
     }
 
+    /**
+     *
+     * @param {*} client
+     */
     _Insert(client) {
       const [x, y] = client.position
       const [w, h] = client.dimensions
@@ -117,6 +151,10 @@ export const spatial_hash_grid = (() => {
       client._cells.nodes = nodes
     }
 
+    /**
+     *
+     * @param {*} client
+     */
     Remove(client) {
       const i1 = client._cells.min
       const i2 = client._cells.max

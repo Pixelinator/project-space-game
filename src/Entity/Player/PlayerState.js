@@ -1,27 +1,59 @@
 import * as THREE from 'three'
 
 export const player_state = (() => {
+  /**
+   *
+   */
   class State {
+    /**
+     *
+     * @param {*} parent
+     */
     constructor(parent) {
       this._parent = parent
     }
 
+    /**
+     *
+     */
     Enter() {}
+
+    /**
+     *
+     */
     Exit() {}
+
+    /**
+     *
+     */
     Update() {}
   }
 
+  /**
+   *
+   */
   class DeathState extends State {
+    /**
+     *
+     * @param {*} parent
+     */
     constructor(parent) {
       super(parent)
 
       this._action = null
     }
 
+    /**
+     *
+     */
     get Name() {
       return 'death'
     }
 
+    /**
+     *
+     * @param {*} prevState
+     */
     Enter(prevState) {
       this._action = this._parent._proxy._animations['death'].action
 
@@ -38,12 +70,26 @@ export const player_state = (() => {
       }
     }
 
+    /**
+     *
+     */
     Exit() {}
 
+    /**
+     *
+     * @param {*} _
+     */
     Update(_) {}
   }
 
+  /**
+   *
+   */
   class AttackState extends State {
+    /**
+     *
+     * @param {*} parent
+     */
     constructor(parent) {
       super(parent)
 
@@ -54,10 +100,17 @@ export const player_state = (() => {
       }
     }
 
+    /**
+     *
+     */
     get Name() {
       return 'attack'
     }
 
+    /**
+     *
+     * @param {*} prevState
+     */
     Enter(prevState) {
       this._action = this._parent._proxy._animations['attack'].action
       const mixer = this._action.getMixer()
@@ -76,33 +129,60 @@ export const player_state = (() => {
       }
     }
 
+    /**
+     *
+     */
     _Finished() {
       this._Cleanup()
       this._parent.SetState('idle')
     }
 
+    /**
+     *
+     */
     _Cleanup() {
       if (this._action) {
         this._action.getMixer().removeEventListener('finished', this._FinishedCallback)
       }
     }
 
+    /**
+     *
+     */
     Exit() {
       this._Cleanup()
     }
 
+    /**
+     *
+     * @param {*} _
+     */
     Update(_) {}
   }
 
+  /**
+   *
+   */
   class WalkState extends State {
+    /**
+     *
+     * @param {*} parent
+     */
     constructor(parent) {
       super(parent)
     }
 
+    /**
+     *
+     */
     get Name() {
       return 'walk'
     }
 
+    /**
+     *
+     * @param {*} prevState
+     */
     Enter(prevState) {
       const curAction = this._parent._proxy._animations['walk'].action
       if (prevState) {
@@ -126,8 +206,17 @@ export const player_state = (() => {
       }
     }
 
+    /**
+     *
+     */
     Exit() {}
 
+    /**
+     *
+     * @param {*} timeElapsed
+     * @param {*} input
+     * @returns <void>
+     */
     Update(timeElapsed, input) {
       if (input._keys.forward || input._keys.backward) {
         if (input._keys.shift) {
@@ -140,15 +229,29 @@ export const player_state = (() => {
     }
   }
 
+  /**
+   *
+   */
   class RunState extends State {
+    /**
+     *
+     * @param {*} parent
+     */
     constructor(parent) {
       super(parent)
     }
 
+    /**
+     *
+     */
     get Name() {
       return 'run'
     }
 
+    /**
+     *
+     * @param {*} prevState
+     */
     Enter(prevState) {
       const curAction = this._parent._proxy._animations['run'].action
       if (prevState) {
@@ -172,8 +275,17 @@ export const player_state = (() => {
       }
     }
 
+    /**
+     *
+     */
     Exit() {}
 
+    /**
+     *
+     * @param {*} timeElapsed
+     * @param {*} input
+     * @returns <void>
+     */
     Update(timeElapsed, input) {
       if (input._keys.forward || input._keys.backward) {
         if (!input._keys.shift) {
@@ -186,15 +298,29 @@ export const player_state = (() => {
     }
   }
 
+  /**
+   *
+   */
   class IdleState extends State {
+    /**
+     *
+     * @param {*} parent
+     */
     constructor(parent) {
       super(parent)
     }
 
+    /**
+     *
+     */
     get Name() {
       return 'idle'
     }
 
+    /**
+     *
+     * @param {*} prevState
+     */
     Enter(prevState) {
       const idleAction = this._parent._proxy._animations['idle'].action
       if (prevState) {
@@ -210,8 +336,16 @@ export const player_state = (() => {
       }
     }
 
+    /**
+     *
+     */
     Exit() {}
 
+    /**
+     *
+     * @param {*} _
+     * @param {*} input
+     */
     Update(_, input) {
       if (input._keys.forward || input._keys.backward) {
         this._parent.SetState('walk')

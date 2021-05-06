@@ -3,21 +3,40 @@ import * as THREE from 'three'
 import { entity } from '../Entity'
 
 export const player_input = (() => {
+  /**
+   *
+   */
   class PickableComponent extends entity.Component {
+    /**
+     *
+     */
     constructor() {
       super()
     }
 
+    /**
+     *
+     */
     InitComponent() {}
   }
 
+  /**
+   *
+   */
   class BasicCharacterControllerInput extends entity.Component {
+    /**
+     *
+     * @param {*} params
+     */
     constructor(params) {
       super()
       this._params = params
       this._Init()
     }
 
+    /**
+     *
+     */
     _Init() {
       this._keys = {
         forward: false,
@@ -33,6 +52,10 @@ export const player_input = (() => {
       document.addEventListener('mouseup', (e) => this._onMouseUp(e), false)
     }
 
+    /**
+     *
+     * @param {*} event
+     */
     _onMouseUp(event) {
       const rect = document.getElementById('threejs').getBoundingClientRect()
       const pos = {
@@ -70,6 +93,10 @@ export const player_input = (() => {
       }
     }
 
+    /**
+     *
+     * @param {*} event
+     */
     _onKeyDown(event) {
       switch (event.keyCode) {
         case 87: // w
@@ -95,6 +122,10 @@ export const player_input = (() => {
       }
     }
 
+    /**
+     *
+     * @param {*} event
+     */
     _onKeyUp(event) {
       switch (event.keyCode) {
         case 87: // w

@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { HDRCubeTextureLoader } from 'three/examples/jsm/loaders/HDRCubeTextureLoader'
 
 /**
- * SkyBox with HDR Environment Map
+ *
  */
 export default class SkyBox {
   constructor(scene, renderer) {

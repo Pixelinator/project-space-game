@@ -7,13 +7,23 @@ import { finite_state_machine } from '../../Controller/StateMachine/FiniteStateM
 import { player_state } from './PlayerState'
 
 export const player_entity = (() => {
+  /**
+   *
+   */
   class CharacterFSM extends finite_state_machine.FiniteStateMachine {
+    /**
+     *
+     * @param {*} proxy
+     */
     constructor(proxy) {
       super()
       this._proxy = proxy
       this._Init()
     }
 
+    /**
+     *
+     */
     _Init() {
       this._AddState('idle', player_state.IdleState)
       this._AddState('walk', player_state.WalkState)
@@ -23,22 +33,43 @@ export const player_entity = (() => {
     }
   }
 
+  /**
+   *
+   */
   class BasicCharacterControllerProxy {
+    /**
+     *
+     * @param {*} animations
+     */
     constructor(animations) {
       this._animations = animations
     }
 
+    /**
+     *
+     */
     get animations() {
       return this._animations
     }
   }
 
+  /**
+   *
+   */
   class BasicCharacterController extends entity.Component {
+    /**
+     *
+     * @param {*} params
+     */
     constructor(params) {
       super()
       this._Init(params)
     }
 
+    /**
+     *
+     * @param {*} params
+     */
     _Init(params) {
       this._params = params
       this._decceleration = new THREE.Vector3(-0.0005, -0.0001, -5.0)
@@ -52,16 +83,26 @@ export const player_entity = (() => {
       this._LoadModels()
     }
 
+    /**
+     *
+     */
     InitComponent() {
       this._RegisterHandler('health.death', (m) => {
         this._OnDeath(m)
       })
     }
 
+    /**
+     *
+     * @param {*} msg
+     */
     _OnDeath(msg) {
       this._stateMachine.SetState('death')
     }
 
+    /**
+     *
+     */
     _LoadModels() {
       const loader = new FBXLoader()
       loader.setPath('./models/fbx/')
@@ -124,6 +165,11 @@ export const player_entity = (() => {
       })
     }
 
+    /**
+     *
+     * @param {*} pos
+     * @returns <array>
+     */
     _FindIntersections(pos) {
       const _IsAlive = (c) => {
         const h = c.entity.GetComponent('HealthComponent')
@@ -149,6 +195,11 @@ export const player_entity = (() => {
       return collisions
     }
 
+    /**
+     *
+     * @param {*} timeInSeconds
+     * @returns <void>
+     */
     Update(timeInSeconds) {
       if (!this._stateMachine._currentState) {
         return

@@ -6,30 +6,51 @@ import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 import { entity } from '../Entity/Entity'
 
 export const gltf_component = (() => {
+  /**
+   *
+   */
   class StaticModelComponent extends entity.Component {
+    /**
+     *
+     * @param {*} params
+     */
     constructor(params) {
       super()
       this._Init(params)
     }
 
+    /**
+     *
+     * @param {*} params
+     */
     _Init(params) {
       this._params = params
 
       this._LoadModels()
     }
 
+    /**
+     *
+     */
     InitComponent() {
       this._RegisterHandler('update.position', (m) => {
         this._OnPosition(m)
       })
     }
 
+    /**
+     *
+     * @param {*} m
+     */
     _OnPosition(m) {
       if (this._target) {
         this._target.position.copy(m.value)
       }
     }
 
+    /**
+     *
+     */
     _LoadModels() {
       if (this._params.resourceName.endsWith('glb') || this._params.resourceName.endsWith('gltf')) {
         this._LoadGLB()
@@ -38,6 +59,10 @@ export const gltf_component = (() => {
       }
     }
 
+    /**
+     *
+     * @param {*} obj
+     */
     _OnLoaded(obj) {
       this._target = obj
       this._params.scene.add(this._target)
@@ -83,6 +108,9 @@ export const gltf_component = (() => {
       })
     }
 
+    /**
+     *
+     */
     _LoadGLB() {
       const loader = new GLTFLoader()
       loader.setPath(this._params.resourcePath)
@@ -91,6 +119,9 @@ export const gltf_component = (() => {
       })
     }
 
+    /**
+     *
+     */
     _LoadFBX() {
       const loader = new FBXLoader()
       loader.setPath(this._params.resourcePath)
@@ -99,21 +130,39 @@ export const gltf_component = (() => {
       })
     }
 
+    /**
+     *
+     * @param {*} timeInSeconds
+     */
     Update(timeInSeconds) {}
   }
 
+  /**
+   *
+   */
   class AnimatedModelComponent extends entity.Component {
+    /**
+     *
+     * @param {*} params
+     */
     constructor(params) {
       super()
       this._Init(params)
     }
 
+    /**
+     *
+     */
     InitComponent() {
       this._RegisterHandler('update.position', (m) => {
         this._OnPosition(m)
       })
     }
 
+    /**
+     *
+     * @param {*} m
+     */
     _OnPosition(m) {
       if (this._target) {
         this._target.position.copy(m.value)
@@ -121,12 +170,19 @@ export const gltf_component = (() => {
       }
     }
 
+    /**
+     *
+     * @param {*} params
+     */
     _Init(params) {
       this._params = params
 
       this._LoadModels()
     }
 
+    /**
+     *
+     */
     _LoadModels() {
       if (this._params.resourceName.endsWith('glb') || this._params.resourceName.endsWith('gltf')) {
         this._LoadGLB()
@@ -135,6 +191,11 @@ export const gltf_component = (() => {
       }
     }
 
+    /**
+     *
+     * @param {*} obj
+     * @param {*} animations
+     */
     _OnLoaded(obj, animations) {
       this._target = obj
       this._params.scene.add(this._target)
@@ -206,6 +267,9 @@ export const gltf_component = (() => {
       })
     }
 
+    /**
+     *
+     */
     _LoadGLB() {
       const loader = new GLTFLoader()
       loader.setPath(this._params.resourcePath)
@@ -214,6 +278,9 @@ export const gltf_component = (() => {
       })
     }
 
+    /**
+     *
+     */
     _LoadFBX() {
       const loader = new FBXLoader()
       loader.setPath(this._params.resourcePath)
@@ -222,6 +289,10 @@ export const gltf_component = (() => {
       })
     }
 
+    /**
+     *
+     * @param {*} timeInSeconds
+     */
     Update(timeInSeconds) {
       if (this._mixer) {
         this._mixer.update(timeInSeconds)

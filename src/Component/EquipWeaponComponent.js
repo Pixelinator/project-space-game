@@ -3,7 +3,14 @@ import { entity } from '../Entity/Entity'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 
 export const equip_weapon_component = (() => {
+  /**
+   * class EquipWeapon extends entity.Component
+   */
   class EquipWeapon extends entity.Component {
+    /**
+     *
+     * @param {*} params
+     */
     constructor(params) {
       super()
       this._params = params
@@ -11,26 +18,44 @@ export const equip_weapon_component = (() => {
       this._name = null
     }
 
+    /**
+     *
+     */
     InitComponent() {
       this._RegisterHandler('load.character', (m) => this._OnCharacterLoaded(m))
       this._RegisterHandler('inventory.equip', (m) => this._OnEquip(m))
     }
 
+    /**
+     *
+     */
     get Name() {
       return this._name
     }
 
+    /**
+     *
+     * @param {*} msg
+     */
     _OnCharacterLoaded(msg) {
       this._bones = msg.bones
       this._AttachTarget()
     }
 
+    /**
+     *
+     */
     _AttachTarget() {
       if (this._bones && this._target) {
         this._bones[this._params.anchor].add(this._target)
       }
     }
 
+    /**
+     *
+     * @param {*} msg
+     * @returns <void>
+     */
     _OnEquip(msg) {
       if (msg.value === this._name) {
         return
@@ -48,6 +73,9 @@ export const equip_weapon_component = (() => {
       })
     }
 
+    /**
+     *
+     */
     _UnloadModels() {
       if (this._target) {
         this._target.parent.remove(this._target)
@@ -56,6 +84,11 @@ export const equip_weapon_component = (() => {
       }
     }
 
+    /**
+     *
+     * @param {*} item
+     * @param {*} cb
+     */
     _LoadModels(item, cb) {
       const loader = new FBXLoader()
       loader.setPath('./resources/weapons/FBX/')

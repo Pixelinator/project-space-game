@@ -37,6 +37,9 @@ export class Game extends Component {
     plane.rotation.x = -Math.PI / 2
     scene.add(plane)
 
+    // ------------------------
+    //     Setup Entities
+    //-------------------------
     const entityManager = new entity_manager.EntityManager()
 
     const grid = new spatial_hash_grid.SpatialHashGrid(

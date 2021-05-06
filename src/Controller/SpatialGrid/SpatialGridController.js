@@ -1,13 +1,23 @@
 import { entity } from '../../Entity/Entity'
 
 export const spatial_grid_controller = (() => {
+  /**
+   *
+   */
   class SpatialGridController extends entity.Component {
+    /**
+     *
+     * @param {*} params
+     */
     constructor(params) {
       super()
 
       this._grid = params.grid
     }
 
+    /**
+     *
+     */
     InitComponent() {
       const pos = [this._parent._position.x, this._parent._position.z]
 
@@ -16,11 +26,20 @@ export const spatial_grid_controller = (() => {
       this._RegisterHandler('update.position', (m) => this._OnPosition(m))
     }
 
+    /**
+     *
+     * @param {*} msg
+     */
     _OnPosition(msg) {
       this._client.position = [msg.value.x, msg.value.z]
       this._grid.UpdateClient(this._client)
     }
 
+    /**
+     *
+     * @param {*} range
+     * @returns <any>
+     */
     FindNearbyEntities(range) {
       const results = this._grid.FindNear([this._parent._position.x, this._parent._position.z], [range, range])
 
