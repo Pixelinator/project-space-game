@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
 import { entity } from '../Entity'
 import { finite_state_machine } from '../../Controller/StateMachine/FiniteStateMachine'
@@ -105,64 +106,158 @@ export const player_entity = (() => {
      */
     _LoadModels() {
       const loader = new FBXLoader()
-      loader.setPath('./models/fbx/')
-      loader.load('mremireh_o_desbiens.fbx', (fbx) => {
-        this._target = fbx
-        this._target.scale.setScalar(0.035)
-        this._params.scene.add(this._target)
+      loader.setPath('./models/fbx/guard/')
+      loader.load(
+        'castle_guard_01.fbx',
+        (fbx) => {
+          this._target = fbx
+          this._target.scale.setScalar(0.035)
+          this._params.scene.add(this._target)
 
-        this._bones = {}
+          this._bones = {}
 
-        for (let b of this._target.children[1].skeleton.bones) {
-          this._bones[b.name] = b
-        }
-
-        this._target.traverse((c) => {
-          c.castShadow = true
-          c.receiveShadow = true
-          if (c.material && c.material.map) {
-            c.material.map.encoding = THREE.sRGBEncoding
+          for (let b of this._target.children[1].skeleton.bones) {
+            this._bones[b.name] = b
           }
-        })
 
-        this.Broadcast({
-          topic: 'load.character',
-          model: this._target,
-          bones: this._bones
-        })
+          this._target.traverse((c) => {
+            c.castShadow = true
+            c.receiveShadow = true
+            if (c.material && c.material.map) {
+              c.material.map.encoding = THREE.sRGBEncoding
+            }
+          })
 
-        this._mixer = new THREE.AnimationMixer(this._target)
+          this.Broadcast({
+            topic: 'load.character',
+            model: this._target,
+            bones: this._bones
+          })
 
-        const _OnLoad = (animName, anim) => {
-          const clip = anim.animations[0]
-          const action = this._mixer.clipAction(clip)
+          this._mixer = new THREE.AnimationMixer(this._target)
 
-          this._animations[animName] = {
-            clip: clip,
-            action: action
+          const _OnLoad = (animName, anim) => {
+            const clip = anim.animations[0]
+            const action = this._mixer.clipAction(clip)
+
+            this._animations[animName] = {
+              clip: clip,
+              action: action
+            }
           }
-        }
 
-        this._manager = new THREE.LoadingManager()
-        this._manager.onLoad = () => {
-          this._stateMachine.SetState('idle')
-        }
+          this._manager = new THREE.LoadingManager()
+          this._manager.onLoad = () => {
+            this._stateMachine.SetState('idle')
+          }
 
-        const loader = new FBXLoader(this._manager)
-        loader.setPath('./models/fbx/')
-        loader.load('idle.fbx', (a) => {
-          _OnLoad('idle', a)
-        })
-        loader.load('run.fbx', (a) => {
-          _OnLoad('run', a)
-        })
-        loader.load('walk.fbx', (a) => {
-          _OnLoad('walk', a)
-        })
-        loader.load('dance.fbx', (a) => {
-          _OnLoad('dance', a)
-        })
-      })
+          const loader = new FBXLoader(this._manager)
+          loader.setPath('./models/fbx/guard/')
+          loader.load('Sword And Shield Idle.fbx', (a) => {
+            _OnLoad('idle', a)
+          })
+          loader.load('Sword And Shield Run.fbx', (a) => {
+            _OnLoad('run', a)
+          })
+          loader.load('Sword And Shield Walk.fbx', (a) => {
+            _OnLoad('walk', a)
+          })
+          loader.load('Sword And Shield Slash.fbx', (a) => {
+            _OnLoad('attack', a)
+          })
+          loader.load('Sword And Shield Death.fbx', (a) => {
+            _OnLoad('death', a)
+          })
+        },
+        function (xhr) {
+          // called while loading is progressing
+          console.log((xhr.loaded / xhr.total).toFixed(2) * 100 + '% loaded')
+        },
+        // called when loading has errors
+        function (error) {
+          console.log('An error happened', error)
+        }
+      )
+    }
+
+    /**
+     *
+     */
+    _LoadModelsGLB() {
+      const loader = new GLTFLoader()
+      loader.setPath('./models/gltf/')
+      loader.load(
+        'guard.glb',
+        (gltf) => {
+          console.log(gltf)
+          this._target = gltf.scene
+          this._target.scale.setScalar(0.035)
+          this._params.scene.add(this._target)
+
+          this._bones = {}
+
+          for (let b of this._target.children[1].skeleton.bones) {
+            this._bones[b.name] = b
+          }
+
+          this._target.traverse((c) => {
+            c.castShadow = true
+            c.receiveShadow = true
+            if (c.material && c.material.map) {
+              c.material.map.encoding = THREE.sRGBEncoding
+            }
+          })
+
+          this.Broadcast({
+            topic: 'load.character',
+            model: this._target,
+            bones: this._bones
+          })
+
+          this._mixer = new THREE.AnimationMixer(this._target)
+
+          const _OnLoad = (animName, anim) => {
+            const clip = anim.animations[0]
+            const action = this._mixer.clipAction(clip)
+
+            this._animations[animName] = {
+              clip: clip,
+              action: action
+            }
+          }
+
+          this._manager = new THREE.LoadingManager()
+          this._manager.onLoad = () => {
+            this._stateMachine.SetState('idle')
+          }
+
+          const loader = new FBXLoader(this._manager)
+          loader.setPath('./models/fbx/guard/')
+          loader.load('Sword And Shield Idle.fbx', (a) => {
+            _OnLoad('idle', a)
+          })
+          loader.load('Sword And Shield Run.fbx', (a) => {
+            _OnLoad('run', a)
+          })
+          loader.load('Sword And Shield Walk.fbx', (a) => {
+            _OnLoad('walk', a)
+          })
+          loader.load('Sword And Shield Slash.fbx', (a) => {
+            _OnLoad('attack', a)
+          })
+          loader.load('Sword And Shield Death.fbx', (a) => {
+            _OnLoad('death', a)
+          })
+        },
+        function (xhr) {
+          // called while loading is progressing
+          console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+        },
+        // called when loading has errors
+        function (error) {
+          console.log('An error happened', error)
+        }
+      )
     }
 
     /**

@@ -16,6 +16,19 @@ export const entity = (() => {
       this._rotation = new THREE.Quaternion()
       this._handlers = {}
       this._parent = null
+      this._dead = false
+    }
+
+    /**
+     *
+     */
+    Destroy() {
+      for (let k in this._components) {
+        this._components[k].Destroy()
+      }
+      this._components = null
+      this._parent = null
+      this._handlers = null
     }
 
     /**
@@ -55,10 +68,24 @@ export const entity = (() => {
 
     /**
      *
+     */
+    get Manager() {
+      return this._parent
+    }
+
+    /**
+     *
      * @param {*} b
      */
     SetActive(b) {
       this._parent.SetActive(this, b)
+    }
+
+    /**
+     *
+     */
+    SetDead() {
+      this._dead = true
     }
 
     /**
@@ -70,6 +97,15 @@ export const entity = (() => {
       this._components[c.constructor.name] = c
 
       c.InitComponent()
+    }
+
+    /**
+     *
+     */
+    InitEntity() {
+      for (let k in this._components) {
+        this._components[k].InitEntity()
+      }
     }
 
     /**
@@ -131,6 +167,20 @@ export const entity = (() => {
 
     /**
      *
+     */
+    get Position() {
+      return this._position
+    }
+
+    /**
+     *
+     */
+    get Quaternion() {
+      return this._rotation
+    }
+
+    /**
+     *
      * @param {*} timeElapsed
      */
     Update(timeElapsed) {
@@ -153,6 +203,11 @@ export const entity = (() => {
 
     /**
      *
+     */
+    Destroy() {}
+
+    /**
+     *
      * @param {*} p
      */
     SetParent(p) {
@@ -166,11 +221,30 @@ export const entity = (() => {
 
     /**
      *
+     */
+    InitEntity() {}
+
+    /**
+     *
      * @param {*} n
      * @returns <object>
      */
     GetComponent(n) {
       return this._parent.GetComponent(n)
+    }
+
+    /**
+     *
+     */
+    get Manager() {
+      return this._parent.Manager
+    }
+
+    /**
+     *
+     */
+    get Parent() {
+      return this._parent
     }
 
     /**

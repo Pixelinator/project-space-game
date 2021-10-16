@@ -55,6 +55,7 @@ export const entity_manager = (() => {
 
       e.SetParent(this)
       e.SetName(n)
+      e.InitEntity()
     }
 
     /**
@@ -65,11 +66,19 @@ export const entity_manager = (() => {
      */
     SetActive(e, b) {
       const i = this._entities.indexOf(e)
-      if (i < 0) {
-        return
-      }
+      if (!b) {
+        if (i < 0) {
+          return
+        }
 
-      this._entities.splice(i, 1)
+        this._entities.splice(i, 1)
+      } else {
+        if (i >= 0) {
+          return
+        }
+
+        this._entities.push(e)
+      }
     }
 
     /**
@@ -77,9 +86,29 @@ export const entity_manager = (() => {
      * @param {*} timeElapsed
      */
     Update(timeElapsed) {
-      for (let e of this._entities) {
+      const dead = []
+      const alive = []
+      for (let i = 0; i < this._entities.length; ++i) {
+        const e = this._entities[i]
+
         e.Update(timeElapsed)
+
+        if (e.dead_) {
+          dead.push(e)
+        } else {
+          alive.push(e)
+        }
       }
+
+      for (let i = 0; i < dead.length; ++i) {
+        const e = dead[i]
+
+        delete this._entitiesMap[e.Name]
+
+        e.Destroy()
+      }
+
+      this._entities = alive
     }
   }
 
