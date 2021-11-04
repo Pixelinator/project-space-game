@@ -218,8 +218,8 @@ export const player_state = (() => {
      * @returns <void>
      */
     Update(timeElapsed, input) {
-      if (input._keys.forward || input._keys.backward) {
-        if (input._keys.shift) {
+      if (input.Keyboard._keys.forward || input.Gamepad._keys.axis1Forward || input.Keyboard._keys.backward) {
+        if (input.Keyboard._keys.shift || input.Gamepad._keys.shift) {
           this._parent.SetState('run')
         }
         return
@@ -287,8 +287,8 @@ export const player_state = (() => {
      * @returns <void>
      */
     Update(timeElapsed, input) {
-      if (input._keys.forward || input._keys.backward) {
-        if (!input._keys.shift) {
+      if (input.Keyboard._keys.forward || input.Gamepad._keys.axis1Forward || input.Keyboard._keys.backward) {
+        if (!input.Keyboard._keys.shift) {
           this._parent.SetState('walk')
         }
         return
@@ -347,9 +347,9 @@ export const player_state = (() => {
      * @param {*} input
      */
     Update(_, input) {
-      if (input._keys.forward || input._keys.backward) {
+      if (input.Keyboard._keys.forward || input.Gamepad._keys.axis1Forward || input.Keyboard._keys.backward) {
         this._parent.SetState('walk')
-      } else if (input._keys.space) {
+      } else if (input.Keyboard._keys.space || input.Gamepad._keys.space) {
         this._parent.SetState('attack')
       }
     }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import * as THREE from 'three'
 import SkyBox from '../SkyBox/Skybox'
+import Stats from 'three/examples/jsm/libs/stats.module'
 import { third_person_camera } from '../Entity/Camera/ThirdPersonCamera'
 import { entity_manager } from '../Entity/EntityManager'
 import { entity } from '../Entity/Entity'
@@ -12,6 +13,7 @@ import { ui_controller } from '../Controller/UI/UIController'
 import { level_up_component } from '../Component/LevelUpComponent'
 import { player_entity } from '../Entity/Player/PlayerEntity'
 import { player_input } from '../Entity/Player/PlayerInput'
+import { player_ps_input } from '../Entity/Player/player-ps-input'
 import { gltf_component } from '../Component/GLTFComponent'
 
 import { spatial_grid_controller } from '../Controller/SpatialGrid/SpatialGridController'
@@ -31,6 +33,9 @@ export class Game extends Component {
     const renderer = new THREE.WebGLRenderer({ antialias: true })
     renderer.setSize(window.innerWidth, window.innerHeight)
     this.mount.appendChild(renderer.domElement)
+
+    const stats = Stats()
+    this.mount.appendChild(stats.dom)
 
     new SkyBox(scene, renderer)
 
@@ -69,209 +74,209 @@ export class Game extends Component {
     const entityManager = new entity_manager.EntityManager()
     window.entityManager = entityManager
 
-    const wall = new entity.Entity()
-    wall.AddComponent(
-      new gltf_component.StaticModelComponent({
-        scene: scene,
-        resourcePath: './models/fbx/environment/Walls/',
-        resourceName: 'Window_Wall_SideA.fbx',
-        scale: 0.04,
-        emissive: new THREE.Color(0x000000),
-        color: new THREE.Color(0x202020)
-      })
-    )
+    // const wall = new entity.Entity()
+    // wall.AddComponent(
+    //   new gltf_component.StaticModelComponent({
+    //     scene: scene,
+    //     resourcePath: './models/fbx/environment/Walls/',
+    //     resourceName: 'Window_Wall_SideA.fbx',
+    //     scale: 0.04,
+    //     emissive: new THREE.Color(0x000000),
+    //     color: new THREE.Color(0x202020)
+    //   })
+    // )
 
-    const column = new entity.Entity()
-    column.AddComponent(
-      new gltf_component.StaticModelComponent({
-        scene: scene,
-        resourcePath: './models/fbx/environment/',
-        resourceName: 'Column_1.fbx',
-        scale: 0.04,
-        emissive: new THREE.Color(0x000000),
-        color: new THREE.Color(0x202020)
-      })
-    )
+    // const column = new entity.Entity()
+    // column.AddComponent(
+    //   new gltf_component.StaticModelComponent({
+    //     scene: scene,
+    //     resourcePath: './models/fbx/environment/',
+    //     resourceName: 'Column_1.fbx',
+    //     scale: 0.04,
+    //     emissive: new THREE.Color(0x000000),
+    //     color: new THREE.Color(0x202020)
+    //   })
+    // )
 
-    const column1 = new entity.Entity()
-    column1.AddComponent(
-      new gltf_component.StaticModelComponent({
-        scene: scene,
-        resourcePath: './models/fbx/environment/',
-        resourceName: 'Column_1.fbx',
-        scale: 0.04,
-        emissive: new THREE.Color(0x000000),
-        color: new THREE.Color(0x202020)
-      })
-    )
+    // const column1 = new entity.Entity()
+    // column1.AddComponent(
+    //   new gltf_component.StaticModelComponent({
+    //     scene: scene,
+    //     resourcePath: './models/fbx/environment/',
+    //     resourceName: 'Column_1.fbx',
+    //     scale: 0.04,
+    //     emissive: new THREE.Color(0x000000),
+    //     color: new THREE.Color(0x202020)
+    //   })
+    // )
 
-    const detail = new entity.Entity()
-    detail.AddComponent(
-      new gltf_component.StaticModelComponent({
-        scene: scene,
-        resourcePath: './models/fbx/environment/',
-        resourceName: 'Props_Statue.fbx',
-        scale: 0.04,
-        emissive: new THREE.Color(0x000000),
-        color: new THREE.Color(0x202020)
-      })
-    )
+    // const detail = new entity.Entity()
+    // detail.AddComponent(
+    //   new gltf_component.StaticModelComponent({
+    //     scene: scene,
+    //     resourcePath: './models/fbx/environment/',
+    //     resourceName: 'Props_Statue.fbx',
+    //     scale: 0.04,
+    //     emissive: new THREE.Color(0x000000),
+    //     color: new THREE.Color(0x202020)
+    //   })
+    // )
 
-    const robot = new entity.Entity()
-    robot.AddComponent(
-      new gltf_component.StaticModelComponent({
-        scene: scene,
-        resourcePath: './models/fbx/robots/',
-        resourceName: 'George.fbx',
-        resourceTexture: './models/fbx/robots/Textures/George_Texture.png',
-        scale: 0.02,
-        emissive: new THREE.Color(0x000000),
-        color: new THREE.Color(0x202020)
-      })
-    )
+    // const robot = new entity.Entity()
+    // robot.AddComponent(
+    //   new gltf_component.StaticModelComponent({
+    //     scene: scene,
+    //     resourcePath: './models/fbx/robots/',
+    //     resourceName: 'George.fbx',
+    //     resourceTexture: './models/fbx/robots/Textures/George_Texture.png',
+    //     scale: 0.02,
+    //     emissive: new THREE.Color(0x000000),
+    //     color: new THREE.Color(0x202020)
+    //   })
+    // )
 
-    const robot1 = new entity.Entity()
-    robot1.AddComponent(
-      new gltf_component.StaticModelComponent({
-        scene: scene,
-        resourcePath: './models/fbx/robots/',
-        resourceName: 'Leela.fbx',
-        resourceTexture: './models/fbx/robots/Textures/Leela_Texture.png',
-        scale: 0.02,
-        emissive: new THREE.Color(0x000000),
-        color: new THREE.Color(0x202020)
-      })
-    )
+    // const robot1 = new entity.Entity()
+    // robot1.AddComponent(
+    //   new gltf_component.StaticModelComponent({
+    //     scene: scene,
+    //     resourcePath: './models/fbx/robots/',
+    //     resourceName: 'Leela.fbx',
+    //     resourceTexture: './models/fbx/robots/Textures/Leela_Texture.png',
+    //     scale: 0.02,
+    //     emissive: new THREE.Color(0x000000),
+    //     color: new THREE.Color(0x202020)
+    //   })
+    // )
 
-    const robot2 = new entity.Entity()
-    robot2.AddComponent(
-      new gltf_component.StaticModelComponent({
-        scene: scene,
-        resourcePath: './models/fbx/robots/',
-        resourceName: 'Mike.fbx',
-        resourceTexture: './models/fbx/robots/Textures/Mike_Texture.png',
-        scale: 0.02,
-        emissive: new THREE.Color(0x000000),
-        color: new THREE.Color(0x202020)
-      })
-    )
+    // const robot2 = new entity.Entity()
+    // robot2.AddComponent(
+    //   new gltf_component.StaticModelComponent({
+    //     scene: scene,
+    //     resourcePath: './models/fbx/robots/',
+    //     resourceName: 'Mike.fbx',
+    //     resourceTexture: './models/fbx/robots/Textures/Mike_Texture.png',
+    //     scale: 0.02,
+    //     emissive: new THREE.Color(0x000000),
+    //     color: new THREE.Color(0x202020)
+    //   })
+    // )
 
-    const robot3 = new entity.Entity()
-    robot3.AddComponent(
-      new gltf_component.AnimatedModelComponent({
-        scene: scene,
-        resourcePath: './models/fbx/robots/',
-        resourceName: 'Stan.fbx',
-        resourceTexture: './models/fbx/robots/Textures/Stan_Texture.png',
-        scale: 0.02
-      })
-    )
+    // const robot3 = new entity.Entity()
+    // robot3.AddComponent(
+    //   new gltf_component.AnimatedModelComponent({
+    //     scene: scene,
+    //     resourcePath: './models/fbx/robots/',
+    //     resourceName: 'Stan.fbx',
+    //     resourceTexture: './models/fbx/robots/Textures/Stan_Texture.png',
+    //     scale: 0.02
+    //   })
+    // )
 
-    const glassMat = new THREE.MeshPhysicalMaterial({
-      metalness: 0.9,
-      roughness: 0.05,
-      envMapIntensity: 0.9,
-      clearcoat: 1,
-      transparent: true,
-      transmission: 0.95,
-      opacity: 0.5,
-      reflectivity: 0.2,
-      refractionRatio: 0.985,
-      ior: 0.9,
-      side: THREE.DoubleSide
-    })
+    // const glassMat = new THREE.MeshPhysicalMaterial({
+    //   metalness: 0.9,
+    //   roughness: 0.05,
+    //   envMapIntensity: 0.9,
+    //   clearcoat: 1,
+    //   transparent: true,
+    //   transmission: 0.95,
+    //   opacity: 0.5,
+    //   reflectivity: 0.2,
+    //   refractionRatio: 0.985,
+    //   ior: 0.9,
+    //   side: THREE.DoubleSide
+    // })
 
-    function waitForElement() {
-      if (typeof wall._components.StaticModelComponent._target !== 'undefined') {
-        wall._components.StaticModelComponent._target.children[0].material[2] = glassMat
-        // add unreal bloom to material4(Light)
-        // console.log(wall._components.StaticModelComponent._target.children[0].material[4])
+    // function waitForElement() {
+    //   if (typeof wall._components.StaticModelComponent._target !== 'undefined') {
+    //     wall._components.StaticModelComponent._target.children[0].material[2] = glassMat
+    //     // add unreal bloom to material4(Light)
+    //     // console.log(wall._components.StaticModelComponent._target.children[0].material[4])
 
-        wall.Broadcast({
-          topic: 'update.position',
-          value: new THREE.Vector3(9, 0, 0)
-        })
+    //     wall.Broadcast({
+    //       topic: 'update.position',
+    //       value: new THREE.Vector3(9, 0, 0)
+    //     })
 
-        column.Broadcast({
-          topic: 'update.position',
-          value: new THREE.Vector3(0, 0, 0)
-        })
-        column1.Broadcast({
-          topic: 'update.position',
-          value: new THREE.Vector3(18, 0, 0)
-        })
+    //     column.Broadcast({
+    //       topic: 'update.position',
+    //       value: new THREE.Vector3(0, 0, 0)
+    //     })
+    //     column1.Broadcast({
+    //       topic: 'update.position',
+    //       value: new THREE.Vector3(18, 0, 0)
+    //     })
 
-        detail.Broadcast({
-          topic: 'update.position',
-          value: new THREE.Vector3(9, 0, -10)
-        })
-      } else {
-        setTimeout(waitForElement, 250)
-      }
-    }
+    //     detail.Broadcast({
+    //       topic: 'update.position',
+    //       value: new THREE.Vector3(9, 0, -10)
+    //     })
+    //   } else {
+    //     setTimeout(waitForElement, 250)
+    //   }
+    // }
 
-    waitForElement()
+    // waitForElement()
 
-    function waitForElement1() {
-      if (typeof robot._components.StaticModelComponent._target !== 'undefined') {
-        robot.Broadcast({
-          topic: 'update.position',
-          value: new THREE.Vector3(0, 0, 10)
-        })
-      } else {
-        setTimeout(waitForElement1, 250)
-      }
-    }
+    // function waitForElement1() {
+    //   if (typeof robot._components.StaticModelComponent._target !== 'undefined') {
+    //     robot.Broadcast({
+    //       topic: 'update.position',
+    //       value: new THREE.Vector3(0, 0, 10)
+    //     })
+    //   } else {
+    //     setTimeout(waitForElement1, 250)
+    //   }
+    // }
 
-    waitForElement1()
+    // waitForElement1()
 
-    function waitForElement2() {
-      if (typeof robot1._components.StaticModelComponent._target !== 'undefined') {
-        robot1.Broadcast({
-          topic: 'update.position',
-          value: new THREE.Vector3(0, 0, 20)
-        })
-      } else {
-        setTimeout(waitForElement2, 250)
-      }
-    }
+    // function waitForElement2() {
+    //   if (typeof robot1._components.StaticModelComponent._target !== 'undefined') {
+    //     robot1.Broadcast({
+    //       topic: 'update.position',
+    //       value: new THREE.Vector3(0, 0, 20)
+    //     })
+    //   } else {
+    //     setTimeout(waitForElement2, 250)
+    //   }
+    // }
 
-    waitForElement2()
+    // waitForElement2()
 
-    function waitForElement3() {
-      if (typeof robot2._components.StaticModelComponent._target !== 'undefined') {
-        robot2.Broadcast({
-          topic: 'update.position',
-          value: new THREE.Vector3(0, 0, 30)
-        })
-      } else {
-        setTimeout(waitForElement3, 250)
-      }
-    }
+    // function waitForElement3() {
+    //   if (typeof robot2._components.StaticModelComponent._target !== 'undefined') {
+    //     robot2.Broadcast({
+    //       topic: 'update.position',
+    //       value: new THREE.Vector3(0, 0, 30)
+    //     })
+    //   } else {
+    //     setTimeout(waitForElement3, 250)
+    //   }
+    // }
 
-    waitForElement3()
+    // waitForElement3()
 
-    function waitForElement4() {
-      if (typeof robot3._components.AnimatedModelComponent._target !== 'undefined') {
-        robot3.Broadcast({
-          topic: 'update.position',
-          value: new THREE.Vector3(0, 0, 40)
-        })
-      } else {
-        setTimeout(waitForElement4, 250)
-      }
-    }
+    // function waitForElement4() {
+    //   if (typeof robot3._components.AnimatedModelComponent._target !== 'undefined') {
+    //     robot3.Broadcast({
+    //       topic: 'update.position',
+    //       value: new THREE.Vector3(0, 0, 40)
+    //     })
+    //   } else {
+    //     setTimeout(waitForElement4, 250)
+    //   }
+    // }
 
-    waitForElement4()
+    // waitForElement4()
 
-    entityManager.Add(wall, 'wall')
-    entityManager.Add(column, 'column')
-    entityManager.Add(column1, 'column1')
-    entityManager.Add(detail, 'detail')
-    entityManager.Add(robot, 'robot')
-    entityManager.Add(robot1, 'robot1')
-    entityManager.Add(robot2, 'robot2')
-    entityManager.Add(robot3, 'robot3')
+    // entityManager.Add(wall, 'wall')
+    // entityManager.Add(column, 'column')
+    // entityManager.Add(column1, 'column1')
+    // entityManager.Add(detail, 'detail')
+    // entityManager.Add(robot, 'robot')
+    // entityManager.Add(robot1, 'robot1')
+    // entityManager.Add(robot2, 'robot2')
+    // entityManager.Add(robot3, 'robot3')
 
     const grid = new spatial_hash_grid.SpatialHashGrid(
       [
@@ -305,6 +310,13 @@ export class Game extends Component {
 
     player.AddComponent(
       new player_entity.BasicCharacterController({
+        camera: camera,
+        scene: scene
+      })
+    )
+
+    player.AddComponent(
+      new player_ps_input.PlayerPSInput({
         camera: camera,
         scene: scene
       })
@@ -413,6 +425,7 @@ export class Game extends Component {
     const step = function (timeElapsed) {
       const timeElapsedS = timeElapsed * 0.001
       entityManager.Update(timeElapsedS)
+      stats.update()
     }
 
     let previousRAF = null
@@ -443,16 +456,14 @@ export class Game extends Component {
               <div className="quest-journal" id="quest-journal"></div>
             </div>
           </div>
-          {/* not hiding and i dont know why yet
-            <div className="ui">
-            <div className="quest-ui-layout">
+          <div className="ui">
+            {/*<div className="quest-ui-layout">
               <div className="quest-ui" id="quest-ui">
                 <div className="quest-text-title" id="quest-text-title"></div>
                 <div className="quest-text" id="quest-text"></div>
               </div>
-            </div>
+            </div>*/}
           </div>
-        */}
           <div className="ui">
             <div className="icon-ui">
               <div className="icon-bar" id="icon-bar">
@@ -512,7 +523,8 @@ export class Game extends Component {
             </div>
           </div>
           <div className="ui">
-            <div className="health-ui" style={{ backgroundImage: `url('./models/icons/ui/health-bar.png')` }}>
+            <div className="health-ui">
+              {/*style={{ backgroundImage: `url('./models/icons/ui/health-bar.png')` }}*/}
               <div className="health-bar" id="health-bar"></div>
             </div>
           </div>

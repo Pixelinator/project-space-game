@@ -106,6 +106,7 @@ export const player_entity = (() => {
      */
     _LoadModels() {
       const loader = new FBXLoader()
+      // make this path into some global file
       loader.setPath('./models/fbx/guard/')
       loader.load(
         'castle_guard_01.fbx',
@@ -301,7 +302,14 @@ export const player_entity = (() => {
       }
 
       const input = this.GetComponent('BasicCharacterControllerInput')
-      this._stateMachine.Update(timeInSeconds, input)
+      const gamepad = this.GetComponent('PlayerPSInput')
+      const inputAll = {
+        Keyboard: input,
+        Gamepad: gamepad
+      }
+      // debugger
+      // console.log(inputAll)
+      this._stateMachine.Update(timeInSeconds, inputAll)
 
       if (this._mixer) {
         this._mixer.update(timeInSeconds)
@@ -334,22 +342,23 @@ export const player_entity = (() => {
       const _R = controlObject.quaternion.clone()
 
       const acc = this._acceleration.clone()
-      if (input._keys.shift) {
+      // console.log(input)
+      if (inputAll.Keyboard._keys.shift || inputAll.Gamepad._keys.shift) {
         acc.multiplyScalar(2.0)
       }
 
-      if (input._keys.forward) {
+      if (inputAll.Keyboard._keys.forward || inputAll.Gamepad._keys.axis1Forward) {
         velocity.z += acc.z * timeInSeconds
       }
-      if (input._keys.backward) {
+      if (inputAll.Keyboard._keys.backward || inputAll.Gamepad._keys.axis1Forward) {
         velocity.z -= acc.z * timeInSeconds
       }
-      if (input._keys.left) {
+      if (inputAll.Keyboard._keys.left || inputAll.Gamepad._keys.axis1Side) {
         _A.set(0, 1, 0)
         _Q.setFromAxisAngle(_A, 4.0 * Math.PI * timeInSeconds * this._acceleration.y)
         _R.multiply(_Q)
       }
-      if (input._keys.right) {
+      if (inputAll.Keyboard._keys.right || inputAll.Gamepad._keys.axis1Side) {
         _A.set(0, 1, 0)
         _Q.setFromAxisAngle(_A, 4.0 * -Math.PI * timeInSeconds * this._acceleration.y)
         _R.multiply(_Q)
@@ -367,7 +376,6 @@ export const player_entity = (() => {
       const sideways = new THREE.Vector3(1, 0, 0)
       sideways.applyQuaternion(controlObject.quaternion)
       sideways.normalize()
-
       sideways.multiplyScalar(velocity.x * timeInSeconds)
       forward.multiplyScalar(velocity.z * timeInSeconds)
 

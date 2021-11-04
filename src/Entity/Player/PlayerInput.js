@@ -44,7 +44,8 @@ export const player_input = (() => {
         left: false,
         right: false,
         space: false,
-        shift: false
+        shift: false,
+        esc: false
       }
       this._raycaster = new THREE.Raycaster()
       document.addEventListener('keydown', (e) => this._onKeyDown(e), false)
@@ -117,6 +118,10 @@ export const player_input = (() => {
         case 16: // SHIFT
           this._keys.shift = true
           break
+        case 27: // ESCAPE
+          this._keys.esc = true
+          console.log('pressed escape')
+          break
         default:
           break
       }
@@ -145,6 +150,9 @@ export const player_input = (() => {
           break
         case 16: // SHIFT
           this._keys.shift = false
+          break
+        case 27: // ESCAPE
+          this._keys.esc = false
           break
         default:
           break
